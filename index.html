@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jokenpô PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then(() => console.log("Service Worker registrado!"))
+                .catch(err => console.log("Erro ao registrar Service Worker:", err));
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Jokenpô</h1>
+        <p>Escolha uma opção:</p>
+
+        <div class="opcoes">
+            <div class="opcao">
+                <img src="img/pedra.png" alt="Pedra">
+                <button onclick="jogar(0)" aria-label="Escolher Pedra">Pedra</button>
+            </div>
+            <div class="opcao">
+                <img src="img/papel.png" alt="Papel">
+                <button onclick="jogar(1)" aria-label="Escolher Papel">Papel</button>
+            </div>
+            <div class="opcao">
+                <img src="img/tesoura.png" alt="Tesoura">
+                <button onclick="jogar(2)" aria-label="Escolher Tesoura">Tesoura</button>
+            </div>
+        </div>
+
+        <p id="resultado"></p>
+
+        <button id="jogarNovamente" style="display:none;" onclick="resetarJogo()">🔄 Jogar Novamente</button>
+        <button id="installBtn" style="display:none;">📥 Instalar PWA</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

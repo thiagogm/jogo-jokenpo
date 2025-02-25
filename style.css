@@ -1,0 +1,207 @@
+/* ========= RESET GERAL ========= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #ff7eb3, #ff758c, #ff7eb3);
+    color: white;
+    height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========= CONTAINER PRINCIPAL (MAIOR PARA EVITAR QUEBRA) ========= */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 480px;  /* Ajustado para mais espaço */
+    min-height: 640px; /* Ajustado para evitar quebra */
+    overflow: hidden;
+}
+
+/* ========= TÍTULO ========= */
+h1 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+/* ========= TEXTO DE INSTRUÇÃO ========= */
+p {
+    color: #444;
+    font-size: 18px;
+}
+
+/* ========= OPÇÕES DE ESCOLHA ========= */
+.opcoes {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 360px;
+    gap: 10px;
+}
+
+/* ========= BOTÕES DAS OPÇÕES ========= */
+.opcao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    width: 100px;
+    height: 130px;
+    text-align: center;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+/* ========= EFEITO VISUAL AO ESCOLHER UMA OPÇÃO ========= */
+.opcao:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+}
+
+.opcao.selecionado {
+    border: 2px solid #ff5722;
+    transform: scale(1.15);
+    box-shadow: 0px 0px 20px rgba(255, 87, 34, 0.5);
+}
+
+/* ========= TAMANHO DAS IMAGENS DAS OPÇÕES ========= */
+.opcao img {
+    width: 70px;
+    height: 70px;
+}
+
+/* ========= BOTÕES DENTRO DAS OPÇÕES ========= */
+.opcao button {
+    background-color: #ff5722;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.opcao button:hover {
+    background-color: #e64a19;
+    transform: scale(1.1);
+}
+
+/* ========= ÁREA DO RESULTADO ========= */
+#resultado {
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; /* Garante espaçamento correto */
+}
+
+#resultado .linha1 {
+    font-weight: bold;
+}
+
+#resultado .linha2 {
+    font-size: 20px;
+    color: #ff5722;
+}
+
+/* ========= BOTÃO "JOGAR NOVAMENTE" (AGORA CORRIGIDO) ========= */
+#jogarNovamente {
+    display: none; /* Escondido inicialmente */
+    margin-top: 15px;
+    padding: 14px;
+    font-size: 18px;
+    width: 230px;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#jogarNovamente.ativo {
+    display: block; /* Mostra o botão quando a classe .ativo for adicionada */
+}
+
+#jogarNovamente:hover {
+    background-color: #388e3c;
+    transform: scale(1.05);
+}
+
+
+/* ========= BOTÃO DE INSTALAÇÃO DO PWA ========= */
+#installBtn {
+    display: block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    width: 200px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#installBtn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* ========= RESPONSIVIDADE ========= */
+@media (max-width: 360px) {
+    .container {
+        max-width: 95%;
+        padding: 20px;
+    }
+
+    .opcoes {
+        max-width: 320px;
+        gap: 8px;
+    }
+
+    .opcao {
+        width: 90px;
+        height: 120px;
+    }
+}
+/* Remove o cursor piscando ao clicar em qualquer parte do jogo */
+body, button, p, span {
+    user-select: none; /* Impede a seleção de texto */
+    outline: none; /* Remove a borda de foco */
+}
