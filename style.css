@@ -5,7 +5,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     font-family: 'Arial', sans-serif;
     text-align: center;
     background: linear-gradient(135deg, #ff7eb3, #ff758c, #ff7eb3);
@@ -28,8 +29,8 @@ html, body {
     border-radius: 15px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
     width: 100%;
-    max-width: 480px;  /* Ajustado para mais espaço */
-    min-height: 640px; /* Ajustado para evitar quebra */
+    max-width: 480px;
+    min-height: 640px;
     overflow: hidden;
 }
 
@@ -114,33 +115,40 @@ p {
 #resultado {
     font-size: 18px;
     font-weight: bold;
-    color: #222;
-    background: rgba(255, 255, 255, 0.9);
+    color: white;
     padding: 15px;
     border-radius: 8px;
     text-align: center;
     width: 100%;
     max-width: 400px;
-    min-height: 80px;
+    min-width: 350px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px; /* Garante espaçamento correto */
+    gap: 5px;
+    margin-bottom: 20px;
+    background: none; /*Removed background*/
 }
 
 #resultado .linha1 {
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); /* Increased text-shadow */
 }
 
 #resultado .linha2 {
     font-size: 20px;
-    color: #ff5722;
+    color: #333; /* Changed to dark gray */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Added white text-shadow */
 }
 
 /* ========= BOTÃO "JOGAR NOVAMENTE" (AGORA CORRIGIDO) ========= */
 #jogarNovamente {
-    display: none; /* Escondido inicialmente */
+    display: none;
     margin-top: 15px;
     padding: 14px;
     font-size: 18px;
@@ -153,19 +161,14 @@ p {
     transition: background 0.3s, transform 0.2s;
 }
 
-#jogarNovamente.ativo {
-    display: block; /* Mostra o botão quando a classe .ativo for adicionada */
-}
-
 #jogarNovamente:hover {
     background-color: #388e3c;
     transform: scale(1.05);
 }
 
-
 /* ========= BOTÃO DE INSTALAÇÃO DO PWA ========= */
 #installBtn {
-    display: block;
+    display: none;
     margin-top: 10px;
     padding: 10px 15px;
     font-size: 16px;
@@ -199,9 +202,19 @@ p {
         width: 90px;
         height: 120px;
     }
+
+    #resultado {
+        min-width: 300px;
+        min-height: 90px;
+        margin-bottom: 10px;
+    }
 }
+
 /* Remove o cursor piscando ao clicar em qualquer parte do jogo */
-body, button, p, span {
-    user-select: none; /* Impede a seleção de texto */
-    outline: none; /* Remove a borda de foco */
+body,
+button,
+p,
+span {
+    user-select: none;
+    outline: none;
 }

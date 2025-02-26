@@ -1,15 +1,14 @@
-const CACHE_NAME = "jokenpo-pwa-v1";
+const CACHE_NAME = "jokenpo-pwa-v2"; // Updated version number
 const FILES_TO_CACHE = [
-    "/",
     "/index.html",
     "/style.css",
     "/script.js",
-    "/sw-register.js",
     "/img/pedra.png",
     "/img/papel.png",
     "/img/tesoura.png",
     "/img/background.jpg",
-    "/manifest.json"
+    "/manifest.json",
+    "/offline.html" // Add the offline page
 ];
 
 // Instalação do Service Worker e cache dos arquivos essenciais
@@ -43,15 +42,33 @@ self.addEventListener("activate", (event) => {
 // Interceptação de requisições para funcionamento offline
 self.addEventListener("fetch", (event) => {
     event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                // Retorna o cache se existir, senão tenta buscar na rede
-                return response || fetch(event.request).catch(() => {
-                    // Responde com uma página offline genérica se a rede falhar
-                    if (event.request.mode === "navigate") {
-                        return caches.match("/index.html");
-                    }
-                });
+        fetch(event.request).then((response) => {
+            //Network-First: We try to fetch the resource, if it's possible
+            const clonedResponse = response.clone();
+
+            caches.open(CACHE_NAME)
+            .then((cache) => {
+                //We cache the response for later usage
+                cache.put(event.request, clonedResponse);
             })
+
+            return response;
+
+        }).catch((err) => {
+            return caches.match(event.request)
+            .then((response) => {
+              
+                // Retorna o cache se existir, senão tenta buscar na rede
+                if (response){
+                    return response;
+                }
+
+                // Responde com uma página offline genérica se a rede falhar
+                if (event.request.mode === "navigate") {
+                    return caches.match("/offline.html");
+                }
+                
+            })
+        })
     );
 });

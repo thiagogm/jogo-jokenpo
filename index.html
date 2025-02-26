@@ -6,13 +6,10 @@
     <title>Jokenpô PWA</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
-    <script>
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("service-worker.js")
-                .then(() => console.log("Service Worker registrado!"))
-                .catch(err => console.log("Erro ao registrar Service Worker:", err));
-        }
-    </script>
+    <meta name="theme-color" content="#4285f4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Jokenpô PWA">
 </head>
 <body>
     <div class="container">
@@ -22,15 +19,15 @@
         <div class="opcoes">
             <div class="opcao">
                 <img src="img/pedra.png" alt="Pedra">
-                <button onclick="jogar(0)" aria-label="Escolher Pedra">Pedra</button>
+                <button aria-label="Escolher Pedra">Pedra</button>
             </div>
             <div class="opcao">
                 <img src="img/papel.png" alt="Papel">
-                <button onclick="jogar(1)" aria-label="Escolher Papel">Papel</button>
+                <button aria-label="Escolher Papel">Papel</button>
             </div>
             <div class="opcao">
                 <img src="img/tesoura.png" alt="Tesoura">
-                <button onclick="jogar(2)" aria-label="Escolher Tesoura">Tesoura</button>
+                <button aria-label="Escolher Tesoura">Tesoura</button>
             </div>
         </div>
 
@@ -41,5 +38,38 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        let deferredPrompt;
+        const installBtn = document.getElementById("installBtn");
+
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredPrompt = event;
+            installBtn.style.display = "block";
+        });
+
+        installBtn.addEventListener("click", () => {
+            installBtn.style.display = "none";
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === "accepted") {
+                    console.log("User accepted the install prompt");
+                } else {
+                    console.log("User dismissed the install prompt");
+                }
+                deferredPrompt = null;
+            });
+        });
+
+        window.addEventListener('appinstalled', (event) => {
+            console.log('App installed');
+        });
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then(() => console.log("Service Worker registrado!"))
+                .catch(err => console.log("Erro ao registrar Service Worker:", err));
+        }
+    </script>
 </body>
 </html>
