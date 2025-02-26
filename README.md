@@ -1,4 +1,3 @@
-# atividade
 
-![](https://github.com/user-attachments/assets/cd423a52-b841-45da-b350-3ea406f17d0c)
 
+![qrcode_thiagogm github io](https://github.com/user-attachments/assets/bb1899b9-12cc-4616-bc39-5f5a4f587598)
