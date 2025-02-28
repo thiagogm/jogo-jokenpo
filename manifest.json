@@ -2,7 +2,7 @@
     "name": "Jokenpô PWA",
     "short_name": "Jokenpô",
     "description": "Jogue Jokenpô (Pedra, Papel e Tesoura) diretamente do seu navegador!",
-    "start_url": "/?utm_source=pwa",
+    "start_url": "/jogo-jokenpo/",
     "scope": "/",
     "display": "standalone",
     "background_color": "#f4f4f4",

@@ -33,7 +33,7 @@
 
         <p id="resultado"></p>
 
-        <button id="jogarNovamente" style="display:none;" onclick="resetarJogo()">🔄 Jogar Novamente</button>
+        <button id="jogarNovamente" style="display:none;">🔄 Jogar Novamente</button>
         <button id="installBtn" style="display:none;">📥 Instalar PWA</button>
     </div>
 
@@ -65,8 +65,9 @@
             console.log('App installed');
         });
 
+        // Service Worker registration, here!
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("service-worker.js")
+            navigator.serviceWorker.register("sw.js") // Corrected to 'sw.js'
                 .then(() => console.log("Service Worker registrado!"))
                 .catch(err => console.log("Erro ao registrar Service Worker:", err));
         }

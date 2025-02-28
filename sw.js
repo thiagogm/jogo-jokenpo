@@ -1,14 +1,14 @@
-const CACHE_NAME = "jokenpo-pwa-v2"; // Updated version number
+const CACHE_NAME = "jokenpo-pwa-v3"; // Updated version number!
 const FILES_TO_CACHE = [
-    "/index.html",
-    "/style.css",
-    "/script.js",
-    "/img/pedra.png",
-    "/img/papel.png",
-    "/img/tesoura.png",
-    "/img/background.jpg",
-    "/manifest.json",
-    "/offline.html" // Add the offline page
+    "/jogo-jokenpo/index.html",
+    "/jogo-jokenpo/style.css",
+    "/jogo-jokenpo/script.js",
+    "/jogo-jokenpo/img/pedra.png",
+    "/jogo-jokenpo/img/papel.png",
+    "/jogo-jokenpo/img/tesoura.png",
+    "/jogo-jokenpo/img/background.jpg",
+    "/jogo-jokenpo/manifest.json",
+    "/jogo-jokenpo/offline.html" // Add the offline page
 ];
 
 // Instalação do Service Worker e cache dos arquivos essenciais
