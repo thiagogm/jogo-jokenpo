@@ -2,74 +2,104 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jokenpô PWA</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css">
-    <meta name="theme-color" content="#4285f4">
+    <style>
+        /* Reset completo */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Configuração para eliminar qualquer possibilidade de rolagem */
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        /* Iframe que conterá todo o conteúdo */
+        #app-container {
+            width: 100%;
+            height: 100%;
+            border: none;
+            overflow: hidden;
+            display: block;
+        }
+    </style>
+    
+    <!-- Ícones para Apple devices -->
+    <link rel="apple-touch-icon" href="img/192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/180x180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="img/180x180.png">
+    
+    <!-- Configurações para PWA -->
+    <meta name="theme-color" content="#007bff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Jokenpô PWA">
 </head>
 <body>
-    <div class="container">
-        <h1>Jokenpô</h1>
-        <p>Escolha uma opção:</p>
-
-        <div class="opcoes">
-            <div class="opcao">
-                <img src="img/pedra.png" alt="Pedra">
-                <button aria-label="Escolher Pedra">Pedra</button>
-            </div>
-            <div class="opcao">
-                <img src="img/papel.png" alt="Papel">
-                <button aria-label="Escolher Papel">Papel</button>
-            </div>
-            <div class="opcao">
-                <img src="img/tesoura.png" alt="Tesoura">
-                <button aria-label="Escolher Tesoura">Tesoura</button>
-            </div>
-        </div>
-
-        <p id="resultado"></p>
-
-        <button id="jogarNovamente" style="display:none;" onclick="resetarJogo()">🔄 Jogar Novamente</button>
-        <button id="installBtn" style="display:none;">📥 Instalar PWA</button>
-    </div>
-
-    <script src="script.js"></script>
+    <!-- Usamos um iframe para conter todo o conteúdo, eliminando qualquer possibilidade de rolagem -->
+    <iframe id="app-container" src="app.html" scrolling="no" frameborder="0"></iframe>
+    
     <script>
-        let deferredPrompt;
-        const installBtn = document.getElementById("installBtn");
-
-        window.addEventListener("beforeinstallprompt", (event) => {
-            event.preventDefault();
-            deferredPrompt = event;
-            installBtn.style.display = "block";
-        });
-
-        installBtn.addEventListener("click", () => {
-            installBtn.style.display = "none";
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === "accepted") {
-                    console.log("User accepted the install prompt");
-                } else {
-                    console.log("User dismissed the install prompt");
-                }
-                deferredPrompt = null;
-            });
-        });
-
-        window.addEventListener('appinstalled', (event) => {
-            console.log('App installed');
-        });
-
+        // Registrar o service worker
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("service-worker.js")
+            navigator.serviceWorker.register("sw.js")
                 .then(() => console.log("Service Worker registrado!"))
                 .catch(err => console.log("Erro ao registrar Service Worker:", err));
         }
+        
+        // Impedir qualquer tipo de rolagem
+        document.addEventListener('scroll', e => e.preventDefault(), { passive: false });
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+        document.addEventListener('wheel', e => e.preventDefault(), { passive: false });
+        document.addEventListener('keydown', e => {
+            if ([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // Gerenciar a instalação do PWA
+        let deferredPrompt;
+        
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredPrompt = event;
+            
+            // Notificar o iframe que o prompt de instalação está disponível
+            const iframe = document.getElementById('app-container');
+            iframe.contentWindow.postMessage({ type: "installPrompt" }, "*");
+        });
+        
+        // Ouvir mensagens do iframe
+        window.addEventListener("message", (event) => {
+            if (event.data && event.data.type === "installApp" && deferredPrompt) {
+                // Mostrar o prompt de instalação
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === "accepted") {
+                        console.log("User accepted the install prompt");
+                    } else {
+                        console.log("User dismissed the install prompt");
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+        
+        window.addEventListener('appinstalled', (event) => {
+            console.log('App installed');
+        });
     </script>
 </body>
 </html>

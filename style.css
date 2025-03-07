@@ -1,220 +1,480 @@
-/* ========= RESET GERAL ========= */
+/* ========= RESET GERAL E PREVENÇÃO ABSOLUTA DE ROLAGEM ========= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    color: #333; /* Forçar cor escura para todos os textos */
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE and Edge */
 }
 
-html,
+/* Esconder scrollbar para Chrome, Safari e Opera */
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}
+
+html {
+    overflow: hidden !important;
+    height: 100% !important;
+    width: 100% !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    touch-action: none !important;
+    -ms-touch-action: none !important;
+    -webkit-overflow-scrolling: none !important;
+    overscroll-behavior: none !important;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     text-align: center;
     background: linear-gradient(135deg, #ff7eb3, #ff758c, #ff7eb3);
-    color: white;
-    height: 100vh;
-    overflow-x: hidden;
+    height: 100% !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: none !important;
+    -ms-touch-action: none !important;
+    -webkit-overflow-scrolling: none !important;
+    overscroll-behavior: none !important;
+    max-height: 100vh !important;
+    max-width: 100vw !important;
 }
 
-/* ========= CONTAINER PRINCIPAL (MAIOR PARA EVITAR QUEBRA) ========= */
+/* ========= CONTAINER PRINCIPAL ========= */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
+    justify-content: flex-start;
+    background: #ffffff; /* Fundo branco sólido para melhor contraste */
+    padding: 15px;
     border-radius: 15px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
     width: 100%;
-    max-width: 480px;
-    min-height: 640px;
-    overflow: hidden;
+    max-width: 450px;
+    height: 680px;
+    max-height: 95vh !important; /* Garantir que não ultrapasse a altura da tela */
+    position: relative;
+    overflow: hidden !important;
+    touch-action: none !important;
+    -ms-touch-action: none !important;
+    -webkit-overflow-scrolling: none !important;
+    overscroll-behavior: none !important;
 }
 
 /* ========= TÍTULO ========= */
 h1 {
-    color: #333;
-    font-size: 28px;
-    margin-bottom: 10px;
+    color: #333 !important;
+    font-size: 26px;
+    margin-bottom: 5px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
 /* ========= TEXTO DE INSTRUÇÃO ========= */
 p {
-    color: #444;
-    font-size: 18px;
+    color: #333 !important;
+    font-size: 16px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    font-weight: 600; /* Texto mais forte para melhor legibilidade */
 }
 
 /* ========= OPÇÕES DE ESCOLHA ========= */
 .opcoes {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     width: 100%;
-    max-width: 360px;
-    gap: 10px;
+    margin: 35px 0 10px 0; /* Aumentado significativamente o margin-top */
+    flex-wrap: wrap;
+    height: 160px;
+    position: relative; /* Para controle de posicionamento */
+    overflow: visible !important; /* Permitir que os cards fiquem visíveis mesmo fora da área */
 }
 
-/* ========= BOTÕES DAS OPÇÕES ========= */
 .opcao {
+    background-color: white;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    width: 30%;
+    height: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background: white;
-    padding: 12px;
-    border-radius: 10px;
-    width: 100px;
-    height: 130px;
-    text-align: center;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
+    justify-content: space-between;
+    touch-action: manipulation !important;
+    position: relative;
+    z-index: 1;
+    border: 2px solid transparent; /* Borda transparente para evitar saltos */
+    overflow: hidden !important;
 }
 
-/* ========= EFEITO VISUAL AO ESCOLHER UMA OPÇÃO ========= */
 .opcao:hover {
-    transform: scale(1.1);
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    transform: translateY(5px); /* Movimento para baixo em vez de escala */
+    border-color: #ddd; /* Borda sutil ao passar o mouse */
 }
 
+/* ========= OPÇÃO SELECIONADA ========= */
 .opcao.selecionado {
-    border: 2px solid #ff5722;
-    transform: scale(1.15);
-    box-shadow: 0px 0px 20px rgba(255, 87, 34, 0.5);
+    border: 3px solid #ff5722;
+    box-shadow: 0 0 15px rgba(255, 87, 34, 0.5);
+    position: relative;
+    transform: none; /* Não altera o tamanho */
+    z-index: 3;
 }
 
-/* ========= TAMANHO DAS IMAGENS DAS OPÇÕES ========= */
+.opcao.selecionado::after {
+    content: "✓";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff5722;
+    color: white !important; /* Forçar cor branca */
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 4;
+}
+
 .opcao img {
-    width: 70px;
-    height: 70px;
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    margin-bottom: 5px;
 }
 
-/* ========= BOTÕES DENTRO DAS OPÇÕES ========= */
 .opcao button {
     background-color: #ff5722;
-    color: white;
+    color: white !important; /* Forçar cor branca */
     font-size: 14px;
-    font-weight: bold;
     border: none;
-    padding: 8px;
-    margin-top: 5px;
+    padding: 6px;
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
-    transition: background 0.3s, transform 0.2s;
+    transition: background 0.3s;
+    font-weight: bold;
 }
 
 .opcao button:hover {
     background-color: #e64a19;
-    transform: scale(1.1);
 }
 
 /* ========= ÁREA DO RESULTADO ========= */
 #resultado {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-    color: white;
-    padding: 15px;
+    color: #333;
+    padding: 8px;
     border-radius: 8px;
     text-align: center;
     width: 100%;
-    max-width: 400px;
-    min-width: 350px;
-    min-height: 100px;
+    height: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 5px;
-    margin-bottom: 20px;
-    background: none; /*Removed background*/
+    margin: 5px 0;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    overflow: hidden !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 #resultado .linha1 {
     font-weight: bold;
+    width: 100%;
+    padding: 0 5px;
+    color: #333 !important;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); /* Increased text-shadow */
+    font-size: 14px;
+    height: 20px;
+    line-height: 20px;
 }
 
 #resultado .linha2 {
-    font-size: 20px;
-    color: #333; /* Changed to dark gray */
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Added white text-shadow */
+    font-size: 22px;
+    font-weight: bold;
+    width: 100%;
+    color: #ff5722; /* Cor padrão */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 30px;
+    line-height: 30px;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
-/* ========= BOTÃO "JOGAR NOVAMENTE" (AGORA CORRIGIDO) ========= */
+/* ========= BOTÕES DE AÇÃO ========= */
+.botoes-acao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    margin: 5px 0;
+    position: relative;
+    overflow: visible !important; /* Permitir que os botões fiquem visíveis */
+}
+
 #jogarNovamente {
-    display: none;
-    margin-top: 15px;
-    padding: 14px;
-    font-size: 18px;
-    width: 230px;
-    border-radius: 5px;
-    background-color: #4caf50;
-    color: white;
+    background-color: #4CAF50;
+    color: white !important; /* Forçar cor branca */
     border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
+    font-size: 14px;
+    width: 100%;
+    max-width: 200px;
+    transition: background-color 0.3s;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 #jogarNovamente:hover {
     background-color: #388e3c;
-    transform: scale(1.05);
 }
 
-/* ========= BOTÃO DE INSTALAÇÃO DO PWA ========= */
 #installBtn {
-    display: none;
-    margin-top: 10px;
-    padding: 10px 15px;
-    font-size: 16px;
-    width: 200px;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
+    background-color: #2196F3;
+    color: white !important; /* Forçar cor branca */
     border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
+    font-size: 14px;
+    width: 100%;
+    max-width: 200px;
+    transition: background-color 0.3s;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 #installBtn:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
+    background-color: #0b7dda;
+}
+
+/* ========= PLACAR ========= */
+.placar {
+    margin-top: 5px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 130px;
+    border: 1px solid #eee;
+    overflow: hidden !important;
+}
+
+.placar h2 {
+    color: #333 !important;
+    font-size: 18px;
+    margin-bottom: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.placar-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    overflow: hidden !important;
+}
+
+.placar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    padding: 3px;
+    overflow: hidden !important;
+}
+
+.placar-item span:first-child {
+    font-size: 13px;
+    color: #333 !important;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.placar-item span:last-child {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333 !important;
+}
+
+#resetarPlacar {
+    background-color: #f44336;
+    color: white !important; /* Forçar cor branca */
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#resetarPlacar:hover {
+    background-color: #d32f2f;
+}
+
+/* ========= DIFICULDADE ========= */
+.dificuldade {
+    margin-top: 5px;
+    width: 100%;
+    height: 65px;
+    overflow: hidden !important;
+}
+
+.dificuldade h3 {
+    color: #333 !important;
+    font-size: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+#nivel-dificuldade {
+    width: 100%;
+    padding: 6px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 14px;
+    color: #333 !important;
+    cursor: pointer;
+    height: 35px;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    overflow: hidden !important;
+}
+
+#nivel-dificuldade option {
+    padding: 5px;
+    font-weight: 500;
+    color: #333 !important;
 }
 
 /* ========= RESPONSIVIDADE ========= */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
     .container {
+        height: 600px;
+        padding: 10px;
+        border-radius: 10px;
         max-width: 95%;
-        padding: 20px;
+        max-height: 90vh !important;
     }
-
+    
     .opcoes {
-        max-width: 320px;
-        gap: 8px;
+        height: 140px;
+        margin: 30px 0 10px 0; /* Ajustado para telas menores */
     }
-
+    
     .opcao {
-        width: 90px;
-        height: 120px;
+        height: 130px;
+        padding: 5px;
     }
-
+    
+    .opcao img {
+        width: 45px;
+        height: 45px;
+    }
+    
     #resultado {
-        min-width: 300px;
-        min-height: 90px;
-        margin-bottom: 10px;
+        height: 60px;
+        font-size: 14px;
+    }
+    
+    #resultado .linha2 {
+        font-size: 18px;
+        height: 25px;
+        line-height: 25px;
+    }
+    
+    .placar {
+        height: 120px;
+        padding: 6px;
+    }
+    
+    .dificuldade {
+        height: 60px;
     }
 }
 
-/* Remove o cursor piscando ao clicar em qualquer parte do jogo */
+/* Desabilitar qualquer interação que possa causar rolagem */
 body,
+.container,
+.opcoes,
+.opcao,
+#resultado,
+.botoes-acao,
+.placar,
+.dificuldade,
+select,
 button,
+div,
+span,
 p,
-span {
-    user-select: none;
-    outline: none;
+h1,
+h2,
+h3 {
+    -ms-touch-action: none !important;
+    touch-action: none !important;
+    -webkit-overflow-scrolling: none !important;
+    overscroll-behavior: none !important;
+    overflow: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
 }

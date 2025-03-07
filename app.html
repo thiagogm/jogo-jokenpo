@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jokenpô PWA</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Ícones para Apple devices -->
+    <link rel="apple-touch-icon" href="img/192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/180x180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="img/180x180.png">
+    
+    <!-- Configurações para PWA -->
+    <meta name="theme-color" content="#007bff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Jokenpô PWA">
+    
+    <style>
+        /* Reset completo */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        *::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        /* Estilos específicos para o conteúdo */
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ff7eb3, #ff758c, #ff7eb3);
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            height: 650px;
+            position: relative;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+        
+        p {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .opcoes {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin: 35px 0 10px 0;
+            flex-wrap: wrap;
+        }
+        
+        .opcao {
+            background-color: white;
+            border-radius: 10px;
+            padding: 8px;
+            margin: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: 30%;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid transparent;
+        }
+        
+        .opcao:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(5px);
+            border-color: #ddd;
+        }
+        
+        .opcao.selecionado {
+            border: 3px solid #ff5722;
+            box-shadow: 0 0 15px rgba(255, 87, 34, 0.5);
+            position: relative;
+        }
+        
+        .opcao.selecionado::after {
+            content: "✓";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #ff5722;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .opcao img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+        
+        .opcao button {
+            background-color: #ff5722;
+            color: white;
+            font-size: 14px;
+            border: none;
+            padding: 6px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+        
+        .opcao button:hover {
+            background-color: #e64a19;
+        }
+        
+        #resultado {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            width: 100%;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        #resultado .linha1 {
+            font-weight: bold;
+            width: 100%;
+            padding: 0 5px;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            height: 20px;
+            line-height: 20px;
+        }
+        
+        #resultado .linha2 {
+            font-size: 22px;
+            font-weight: bold;
+            width: 100%;
+            color: #ff5722;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 30px;
+            line-height: 30px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+        
+        .botoes-acao {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 50px;
+            margin: 5px 0;
+            position: relative;
+        }
+        
+        #jogarNovamente {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            max-width: 200px;
+            transition: background-color 0.3s;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        #jogarNovamente:hover {
+            background-color: #388e3c;
+        }
+        
+        #installBtn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            max-width: 200px;
+            transition: background-color 0.3s;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        #installBtn:hover {
+            background-color: #0b7dda;
+        }
+        
+        .placar {
+            margin-top: 5px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 130px;
+            border: 1px solid #eee;
+        }
+        
+        .placar h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .placar-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .placar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            padding: 3px;
+        }
+        
+        .placar-item span:first-child {
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+        
+        .placar-item span:last-child {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        #resetarPlacar {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        #resetarPlacar:hover {
+            background-color: #d32f2f;
+        }
+        
+        .dificuldade {
+            margin-top: 5px;
+            width: 100%;
+            height: 65px;
+        }
+        
+        .dificuldade h3 {
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        
+        #nivel-dificuldade {
+            width: 100%;
+            padding: 6px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            height: 35px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        #nivel-dificuldade option {
+            padding: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                height: 600px;
+                padding: 10px;
+                border-radius: 10px;
+                max-width: 95%;
+            }
+            
+            .opcao {
+                height: 130px;
+                padding: 5px;
+            }
+            
+            .opcao img {
+                width: 45px;
+                height: 45px;
+            }
+            
+            #resultado {
+                height: 60px;
+                font-size: 14px;
+            }
+            
+            #resultado .linha2 {
+                font-size: 18px;
+                height: 25px;
+                line-height: 25px;
+            }
+            
+            .placar {
+                height: 120px;
+                padding: 6px;
+            }
+            
+            .dificuldade {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Jokenpô</h1>
+        <p>Escolha uma opção:</p>
+
+        <div class="opcoes">
+            <div class="opcao" title="Escolher Pedra">
+                <img src="img/pedra.png" alt="Pedra">
+                <button aria-label="Escolher Pedra">Pedra</button>
+            </div>
+            <div class="opcao" title="Escolher Papel">
+                <img src="img/papel.png" alt="Papel">
+                <button aria-label="Escolher Papel">Papel</button>
+            </div>
+            <div class="opcao" title="Escolher Tesoura">
+                <img src="img/tesoura.png" alt="Tesoura">
+                <button aria-label="Escolher Tesoura">Tesoura</button>
+            </div>
+        </div>
+
+        <div id="resultado"></div>
+
+        <div class="botoes-acao">
+            <button id="jogarNovamente" onclick="resetarJogo()" title="Jogar Novamente">🔄 Jogar Novamente</button>
+            <button id="installBtn" title="Instalar como aplicativo">📥 Instalar PWA</button>
+        </div>
+        
+        <!-- Placar -->
+        <div id="placar" class="placar">
+            <h2>Placar</h2>
+            <div class="placar-container">
+                <div class="placar-item">
+                    <span>Você</span>
+                    <span id="placar-usuario">0</span>
+                </div>
+                <div class="placar-item">
+                    <span>Empates</span>
+                    <span id="placar-empates">0</span>
+                </div>
+                <div class="placar-item">
+                    <span>Computador</span>
+                    <span id="placar-computador">0</span>
+                </div>
+            </div>
+            <button id="resetarPlacar">Zerar Placar</button>
+        </div>
+        
+        <!-- Seletor de Dificuldade -->
+        <div class="dificuldade">
+            <h3>Dificuldade</h3>
+            <select id="nivel-dificuldade">
+                <option value="facil">Fácil</option>
+                <option value="medio" selected>Médio</option>
+                <option value="dificil">Difícil</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis globais
+        const opcoes = ["Pedra", "Papel", "Tesoura"];
+        const resultadoDiv = document.getElementById("resultado");
+        const jogarNovamenteBtn = document.getElementById("jogarNovamente");
+        const opcaoDivs = document.querySelectorAll(".opcao");
+        const nivelDificuldade = document.getElementById("nivel-dificuldade");
+        
+        // Elementos do placar
+        const placarUsuario = document.getElementById("placar-usuario");
+        const placarEmpates = document.getElementById("placar-empates");
+        const placarComputador = document.getElementById("placar-computador");
+        const resetarPlacarBtn = document.getElementById("resetarPlacar");
+        
+        // Inicializar placar do localStorage ou começar do zero
+        let placar = {
+            usuario: parseInt(localStorage.getItem("placar-usuario")) || 0,
+            empates: parseInt(localStorage.getItem("placar-empates")) || 0,
+            computador: parseInt(localStorage.getItem("placar-computador")) || 0
+        };
+        
+        // Inicializar a área de resultado com espaço em branco para manter o layout consistente
+        resultadoDiv.innerHTML = '<span class="linha1">&nbsp;</span><span class="linha2">&nbsp;</span>';
+        
+        // Atualizar placar na interface
+        atualizarPlacar();
+        
+        function atualizarPlacar() {
+            placarUsuario.textContent = placar.usuario;
+            placarEmpates.textContent = placar.empates;
+            placarComputador.textContent = placar.computador;
+            
+            // Destacar visualmente o placar
+            if (placar.usuario > placar.computador) {
+                placarUsuario.style.color = "#4CAF50"; // Verde para indicar vitória
+                placarComputador.style.color = "#f44336"; // Vermelho para indicar derrota
+            } else if (placar.computador > placar.usuario) {
+                placarUsuario.style.color = "#f44336"; // Vermelho para indicar derrota
+                placarComputador.style.color = "#4CAF50"; // Verde para indicar vitória
+            } else {
+                placarUsuario.style.color = "#333"; // Cor padrão para empate
+                placarComputador.style.color = "#333"; // Cor padrão para empate
+            }
+            
+            // Salvar no localStorage
+            localStorage.setItem("placar-usuario", placar.usuario);
+            localStorage.setItem("placar-empates", placar.empates);
+            localStorage.setItem("placar-computador", placar.computador);
+        }
+        
+        function resetarPlacar() {
+            placar = {
+                usuario: 0,
+                empates: 0,
+                computador: 0
+            };
+            atualizarPlacar();
+        }
+        
+        // Lógica para diferentes níveis de dificuldade
+        function escolhaComputadorInteligente(escolhaUsuario, nivel) {
+            // No nível fácil, o computador escolhe aleatoriamente (33% de chance para cada opção)
+            if (nivel === "facil") {
+                return Math.floor(Math.random() * 3);
+            }
+            
+            // No nível médio, o computador tem uma pequena vantagem (50% aleatório, 50% inteligente)
+            else if (nivel === "medio") {
+                if (Math.random() < 0.5) {
+                    return Math.floor(Math.random() * 3);
+                } else {
+                    // Escolha que vence a do usuário
+                    return (escolhaUsuario + 1) % 3;
+                }
+            }
+            
+            // No nível difícil, o computador é mais inteligente (70% inteligente, 30% aleatório)
+            else if (nivel === "dificil") {
+                if (Math.random() < 0.3) {
+                    return Math.floor(Math.random() * 3);
+                } else {
+                    // Escolha que vence a do usuário
+                    return (escolhaUsuario + 1) % 3;
+                }
+            }
+            
+            // Fallback para escolha aleatória
+            return Math.floor(Math.random() * 3);
+        }
+
+        function jogar(escolhaUsuario) {
+            const nivel = nivelDificuldade.value;
+            const escolhaComputador = escolhaComputadorInteligente(escolhaUsuario, nivel);
+            let mensagem = "";
+            let corMensagem = "";
+
+            if (escolhaUsuario === escolhaComputador) {
+                mensagem = "Empate!";
+                corMensagem = "#FF9800"; // Laranja para empate
+                placar.empates++;
+            } else if (
+                (escolhaUsuario === 0 && escolhaComputador === 2) ||
+                (escolhaUsuario === 1 && escolhaComputador === 0) ||
+                (escolhaUsuario === 2 && escolhaComputador === 1)
+            ) {
+                mensagem = "Você venceu!";
+                corMensagem = "#4CAF50"; // Verde para vitória
+                placar.usuario++;
+            } else {
+                mensagem = "Você perdeu!";
+                corMensagem = "#f44336"; // Vermelho para derrota
+                placar.computador++;
+            }
+            
+            // Atualizar placar
+            atualizarPlacar();
+
+            // Usar um formato consistente para o resultado com texto mais curto e cores forçadas
+            resultadoDiv.innerHTML = `
+                <span class="linha1">Você: ${opcoes[escolhaUsuario]} vs PC: ${opcoes[escolhaComputador]}</span>
+                <span class="linha2" style="color: ${corMensagem}">${mensagem}</span>
+            `;
+
+            // Destacar a opção selecionada sem alterar o tamanho
+            opcaoDivs.forEach((el, index) => {
+                el.classList.remove("selecionado");
+                if (index === escolhaUsuario) {
+                    el.classList.add("selecionado");
+                }
+            });
+
+            // Mostrar o botão sem alterar o layout
+            jogarNovamenteBtn.style.display = "block";
+        }
+
+        function resetarJogo() {
+            // Manter um espaço reservado para preservar o layout
+            resultadoDiv.innerHTML = '<span class="linha1">&nbsp;</span><span class="linha2">&nbsp;</span>';
+            opcaoDivs.forEach(el => el.classList.remove("selecionado"));
+            jogarNovamenteBtn.style.display = "none";
+        }
+
+        // Event listeners
+        jogarNovamenteBtn.addEventListener("click", resetarJogo);
+        resetarPlacarBtn.addEventListener("click", resetarPlacar);
+
+        opcaoDivs.forEach((el, index) => {
+            el.addEventListener("click", () => jogar(index));
+            el.querySelector("button").addEventListener("click", (e) => {
+                e.stopPropagation();
+                jogar(index);
+            });
+        });
+        
+        // Inicializar o jogo com layout consistente
+        resetarJogo();
+        
+        // Comunicação com a página pai para instalação do PWA
+        const installBtn = document.getElementById("installBtn");
+        
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === "installPrompt") {
+                installBtn.style.display = "block";
+                installBtn.addEventListener("click", function() {
+                    installBtn.style.display = "none";
+                    window.parent.postMessage({ type: "installApp" }, "*");
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
